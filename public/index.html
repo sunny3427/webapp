@@ -3,61 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Proxy Hasher</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 40px;
-      background: #f4f4f4;
-    }
-    input {
-      padding: 10px;
-      width: 60%;
-      max-width: 500px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #0078D4;
-      color: white;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 16px;
-      word-break: break-all;
-    }
-  </style>
+  <title>Simple Proxy</title>
 </head>
 <body>
-  <h2>🔐 Proxy URL Hasher</h2>
-  <input id="urlInput" placeholder="Paste a URL here..." />
-  <button onclick="generateHash()">Generate Proxy URL</button>
-
-  <div id="result"></div>
+  <h2>Paste a URL to proxy</h2>
+  <input type="text" id="urlInput" placeholder="Enter a URL" style="width: 300px;" />
+  <button onclick="hashAndRedirect()">Go</button>
 
   <script>
-    async function generateHash() {
-      const input = document.getElementById("urlInput").value.trim();
-      if (!input) return alert("Please enter a URL.");
-
-      try {
-        const encoded = btoa(input); // base64 encode
-        const proxyBase = window.location.origin + "/proxy/";
-        const finalURL = proxyBase + encoded;
-
-        document.getElementById("result").innerHTML = `
-          <strong>Proxy URL:</strong><br/>
-          <a href="${finalURL}" target="_blank">${finalURL}</a>
-        `;
-      } catch (e) {
-        alert("Error generating hash.");
-      }
+    function hashAndRedirect() {
+      const url = document.getElementById('urlInput').value;
+      if (!url) return alert('Please enter a URL.');
+      const hash = btoa(url); // Base64 encode
+      window.location.href = `/proxy/${hash}`;
     }
   </script>
 </body>
