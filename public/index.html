@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Simple Node Proxy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL Encoder Proxy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f9f9f9;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      font-size: 1rem;
+    }
+    a {
+      word-break: break-all;
+      color: blue;
+      text-decoration: none;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to Your Proxy!</h1>
-  <p>Try accessing: <a href="/proxy/https://example.com">/proxy/https://example.com</a></p>
+  <h2>Proxy URL Encoder</h2>
+  <p>Paste a URL below to generate a proxy link with Base64 encoding:</p>
+  <input type="text" id="urlInput" placeholder="Enter target URL here..." />
+  <button onclick="generate()">Generate Proxy URL</button>
+
+  <div class="output" id="output" style="display:none;">
+    <strong>Encoded URL:</strong>
+    <p id="encodedText"></p>
+    <strong>Proxy Link:</strong>
+    <p><a id="proxyLink" href="#" target="_blank"></a></p>
+  </div>
+
+  <script>
+    function generate() {
+      const url = document.getElementById('urlInput').value;
+      if (!url) return;
+
+      const encoded = btoa(url);
+      const host = window.location.origin;
+      const proxyUrl = `${host}/encoded/${encoded}`;
+
+      document.getElementById('encodedText').textContent = encoded;
+      const link = document.getElementById('proxyLink');
+      link.href = proxyUrl;
+      link.textContent = proxyUrl;
+      document.getElementById('output').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
