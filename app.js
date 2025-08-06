@@ -2,13 +2,14 @@
 const express = require('express');
 const unblocker = require('unblocker');
 const path = require('path');
+
 const app = express();
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 // Serve static frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Decode Base64 hash to real URL
+// Decode Base64 and redirect
 app.use('/proxy/:hash', (req, res, next) => {
   try {
     const hash = req.params.hash;
@@ -16,17 +17,13 @@ app.use('/proxy/:hash', (req, res, next) => {
     req.url = decoded;
     next();
   } catch (err) {
-    res.status(400).send("Invalid URL encoding.");
+    res.status(400).send("Invalid Base64 URL.");
   }
 });
 
-// Unblocker middleware
-app.use('/proxy', unblocker({
-  prefix: '/proxy/',
-  requestMiddleware: []
-}));
+// Proxy middleware
+app.use('/proxy', unblocker({ prefix: '/proxy/' }));
 
-// Start server
-app.listen(port, () => {
-  console.log(`Proxy server running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
