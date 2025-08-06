@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Simple Proxy</title>
 </head>
 <body>
-  <h2>Paste a URL to proxy</h2>
-  <input type="text" id="urlInput" placeholder="Enter a URL" style="width: 300px;" />
-  <button onclick="hashAndRedirect()">Go</button>
+  <h1>URL Proxy</h1>
+  <input type="text" id="urlInput" placeholder="Enter URL" />
+  <button onclick="go()">Go</button>
 
   <script>
-    function hashAndRedirect() {
-      const url = document.getElementById('urlInput').value;
-      if (!url) return alert('Please enter a URL.');
-      const hash = btoa(url); // Base64 encode
-      window.location.href = `/proxy/${hash}`;
+    async function go() {
+      const url = document.getElementById("urlInput").value;
+      if (!url) return alert("Enter a valid URL");
+
+      const res = await fetch("/hash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+      const data = await res.json();
+      if (data.encoded) {
+        window.open("/proxy/" + data.encoded, "_blank");
+      } else {
+        alert("Error: " + JSON.stringify(data));
+      }
     }
   </script>
 </body>
