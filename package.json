@@ -1,7 +1,7 @@
 {
   "name": "simple-node-proxy",
   "version": "1.0.0",
-  "description": "A simple Node.js proxy with URL hashing frontend.",
+  "description": "A simple Node.js proxy with Base64 route",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "unblocker": "^2.1.0",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "unblocker": "^2.1.0"
   }
 }
