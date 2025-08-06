@@ -3,63 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>URL Encoder Proxy</title>
+  <title>Proxy Hasher</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      max-width: 600px;
-      margin: auto;
-      background-color: #f9f9f9;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f4f4f4;
     }
-    input, button {
+    input {
       padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      font-size: 1rem;
-    }
-    a {
-      word-break: break-all;
-      color: blue;
-      text-decoration: none;
-    }
-    .output {
-      margin-top: 20px;
-      padding: 15px;
-      background: #fff;
+      width: 60%;
+      max-width: 500px;
       border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #0078D4;
+      color: white;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      word-break: break-all;
     }
   </style>
 </head>
 <body>
-  <h2>Proxy URL Encoder</h2>
-  <p>Paste a URL below to generate a proxy link with Base64 encoding:</p>
-  <input type="text" id="urlInput" placeholder="Enter target URL here..." />
-  <button onclick="generate()">Generate Proxy URL</button>
+  <h2>🔐 Proxy URL Hasher</h2>
+  <input id="urlInput" placeholder="Paste a URL here..." />
+  <button onclick="generateHash()">Generate Proxy URL</button>
 
-  <div class="output" id="output" style="display:none;">
-    <strong>Encoded URL:</strong>
-    <p id="encodedText"></p>
-    <strong>Proxy Link:</strong>
-    <p><a id="proxyLink" href="#" target="_blank"></a></p>
-  </div>
+  <div id="result"></div>
 
   <script>
-    function generate() {
-      const url = document.getElementById('urlInput').value;
-      if (!url) return;
+    async function generateHash() {
+      const input = document.getElementById("urlInput").value.trim();
+      if (!input) return alert("Please enter a URL.");
 
-      const encoded = btoa(url);
-      const host = window.location.origin;
-      const proxyUrl = `${host}/encoded/${encoded}`;
+      try {
+        const encoded = btoa(input); // base64 encode
+        const proxyBase = window.location.origin + "/proxy/";
+        const finalURL = proxyBase + encoded;
 
-      document.getElementById('encodedText').textContent = encoded;
-      const link = document.getElementById('proxyLink');
-      link.href = proxyUrl;
-      link.textContent = proxyUrl;
-      document.getElementById('output').style.display = 'block';
+        document.getElementById("result").innerHTML = `
+          <strong>Proxy URL:</strong><br/>
+          <a href="${finalURL}" target="_blank">${finalURL}</a>
+        `;
+      } catch (e) {
+        alert("Error generating hash.");
+      }
     }
   </script>
 </body>
 </html>
-
