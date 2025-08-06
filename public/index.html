@@ -1,29 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Simple Proxy</title>
+  <meta charset="UTF-8" />
+  <title>URL Hasher Proxy</title>
 </head>
 <body>
-  <h1>URL Proxy</h1>
-  <input type="text" id="urlInput" placeholder="Enter URL" />
-  <button onclick="go()">Go</button>
+  <h2>Proxy URL Hasher</h2>
+  <input id="urlInput" type="text" placeholder="Enter URL like https://example.com" size="60" />
+  <button onclick="generateLink()">Get Proxy Link</button>
+  <p>Proxy Link: <a id="output" href="#" target="_blank"></a></p>
 
   <script>
-    async function go() {
-      const url = document.getElementById("urlInput").value;
-      if (!url) return alert("Enter a valid URL");
-
-      const res = await fetch("/hash", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
-      const data = await res.json();
-      if (data.encoded) {
-        window.open("/proxy/" + data.encoded, "_blank");
-      } else {
-        alert("Error: " + JSON.stringify(data));
-      }
+    function generateLink() {
+      const input = document.getElementById("urlInput").value.trim();
+      const encoded = btoa(input);
+      const base = window.location.origin;
+      const proxyLink = `${base}/proxy/${encoded}`;
+      const output = document.getElementById("output");
+      output.href = proxyLink;
+      output.innerText = proxyLink;
     }
   </script>
 </body>
