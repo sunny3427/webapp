@@ -1,29 +1,29 @@
-const express = require("express");
-const fetch = require("node-fetch");
-const app = express();
+const express = require('express');
+const request = require('request');
+const path = require('path');
 
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-app.get("/proxy/*", async (req, res) => {
-  const targetUrl = req.params[0];
+function decodeBase64Url(encoded) {
+  return Buffer.from(encoded, 'base64').toString('utf8');
+}
 
-  if (!targetUrl || !targetUrl.startsWith("http")) {
-    return res.status(400).send("Invalid or missing target URL.");
-  }
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
+app.get('/encoded/:url', (req, res) => {
   try {
-    const response = await fetch(targetUrl);
-    const body = await response.text();
-
-    res.set("Content-Type", response.headers.get("content-type") || "text/plain");
-    res.send(body);
-  } catch (err) {
-    res.status(500).send("Error fetching target: " + err.message);
+    const decodedUrl = decodeBase64Url(req.params.url);
+    req.pipe(request(decodedUrl)).pipe(res);
+  } catch (e) {
+    res.status(400).send('Invalid encoded URL');
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Proxy server running on port ${PORT}`);
+  console.log(`Proxy server running at http://localhost:${PORT}`);
 });
