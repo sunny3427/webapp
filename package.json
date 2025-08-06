@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "node-fetch": "^2.6.7"
+    "unblocker": "^2.0.0"
   }
 }
